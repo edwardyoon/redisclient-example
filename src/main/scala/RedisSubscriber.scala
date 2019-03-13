@@ -9,9 +9,7 @@ object RedisSubscriber {
 }
 
 class RedisSubscriberActor(redisClient: RedisClient) extends Actor with ActorLogging {
-
   import RedisSubscriber._
-
   var state = SubscriptionState(subscriber = Map.empty, subscribed = Map.empty)
 
   override def receive: Receive = {
