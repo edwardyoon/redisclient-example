@@ -1,14 +1,9 @@
 
 import RedisSubscriber.{Published, Subscribe}
 import akka.actor._
-import com.redis.{E, M, PubSubMessage, RedisClient, S, U}
 
-import scala.concurrent.ExecutionContext
 import com.redis.RedisClient
 import com.typesafe.config.ConfigFactory
-
-import scala.util.parsing.json._
-
 
 object TestDriver {
 
@@ -22,8 +17,5 @@ object TestDriver {
     val testActor = system.actorOf(Props(new RedisSubscriberActor(s)))
 
     testActor ! Subscribe(Seq("test"))
-
-
-    testActor ! Published("test", "hello world")
   }
 }
