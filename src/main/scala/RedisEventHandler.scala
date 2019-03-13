@@ -46,6 +46,7 @@ class RedisClientActor(redisClient: RedisClient) extends Actor with ActorLogging
   }
 }
 
+// This manages subscribers' state. It can be used optionally. 
 object RedisClientActor {
   def props(redisClient: RedisClient) =
     Props(new RedisClientActor(redisClient))
