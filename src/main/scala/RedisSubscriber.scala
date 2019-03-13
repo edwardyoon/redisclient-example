@@ -5,7 +5,7 @@ import com.redis._
 object RedisSubscriber {
   case class Subscribe(channels: Seq[String])
   case class Unsubscribe(channels: Seq[String])
-  case class Published(channel: String, data: String)
+  case class Publish(channel: String, data: String)
 }
 
 class RedisSubscriberActor(redisClient: RedisClient) extends Actor with ActorLogging {
@@ -42,6 +42,10 @@ class RedisSubscriberActor(redisClient: RedisClient) extends Actor with ActorLog
 
     case M(channel, data) =>
       log.info("message has arrived from redis.")
+
+    case Publish(channel, data) =>
+      log.info("message publish to the redis")
+      redisClient.publish(channel, data)
 
     // NOT handling com.redis.redisclient.E
   }

@@ -1,4 +1,4 @@
-name := "redis-test"
+name := "redisclient-example"
 
 version := "0.1"
 
