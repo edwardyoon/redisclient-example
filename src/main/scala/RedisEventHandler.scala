@@ -1,15 +1,14 @@
-import RedisSubscriberActor.SubscriptionState
+import RedisClientActor.SubscriptionState
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import com.redis._
 
-object RedisSubscriber {
+object RedisEventHandler {
   case class Subscribe(channels: Seq[String])
   case class Unsubscribe(channels: Seq[String])
-  case class Publish(channel: String, data: String)
 }
 
-class RedisSubscriberActor(redisClient: RedisClient) extends Actor with ActorLogging {
-  import RedisSubscriber._
+class RedisClientActor(redisClient: RedisClient) extends Actor with ActorLogging {
+  import RedisEventHandler._
   var state = SubscriptionState(subscriber = Map.empty, subscribed = Map.empty)
 
   override def receive: Receive = {
@@ -43,17 +42,13 @@ class RedisSubscriberActor(redisClient: RedisClient) extends Actor with ActorLog
     case M(channel, data) =>
       log.info("message has arrived from redis.")
 
-    case Publish(channel, data) =>
-      log.info("message publish to the redis")
-      redisClient.publish(channel, data)
-
     // NOT handling com.redis.redisclient.E
   }
 }
 
-object RedisSubscriberActor {
+object RedisClientActor {
   def props(redisClient: RedisClient) =
-    Props(new RedisSubscriberActor(redisClient))
+    Props(new RedisClientActor(redisClient))
 
   case class SubscriptionState(subscriber: Map[String, Set[ActorRef]],
                                subscribed: Map[ActorRef, Set[String]]) {
